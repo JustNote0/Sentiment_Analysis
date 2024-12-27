@@ -16,16 +16,18 @@ nltk.download('punkt_tab')
 nltk.download('stopwords')
 nltk.download('wordnet')
 
+# Logging hanya untuk error
+import logging
+logging.basicConfig(level=logging.ERROR)
+
 headers = {'User-Agent': 'Mozilla/5.0'}
 
 # ====== SCRAPING ======
 async def fetch(session, url):
-    """Fetch content from a URL."""
     async with session.get(url) as response:
         return await response.text()
 
 async def get_total_reviews(base_url):
-    """Get total number of reviews from IMDb page."""
     async with aiohttp.ClientSession(headers=headers) as session:
         content = await fetch(session, base_url)
         soup = BeautifulSoup(content, 'html.parser')
@@ -36,14 +38,12 @@ async def get_total_reviews(base_url):
         return 0
 
 async def fetch_review_detail(session, url):
-    """Fetch individual review details."""
     content = await fetch(session, url)
     soup = BeautifulSoup(content, 'html.parser')
     review = soup.find('div', {'class': 'text show-more__control'})
     return review.text.strip() if review else "Review not found"
 
 async def scrape_reviews(base_url):
-    """Scrape reviews from IMDb."""
     reviews = []
     async with aiohttp.ClientSession(headers=headers) as session:
         total_reviews = await get_total_reviews(base_url)
@@ -74,7 +74,6 @@ async def scrape_reviews(base_url):
 
 # ====== PREPROCESSING ======
 def decontracted(phrase):
-    """Expand contractions."""
     phrase = re.sub(r"won't", "will not", phrase)
     phrase = re.sub(r"can\'t", "can not", phrase)
     phrase = re.sub(r"n\'t", " not", phrase)
@@ -88,7 +87,6 @@ def decontracted(phrase):
     return phrase
 
 def preprocess_text(text_data):
-    """Clean and preprocess text."""
     stop_words = set(stopwords.words('english'))
     lemmatizer = WordNetLemmatizer()
     preprocessed_text = []
@@ -104,7 +102,6 @@ def preprocess_text(text_data):
 
 # ====== SENTIMENT ANALYSIS ======
 def analyze_sentiment(text):
-    """Perform sentiment analysis using TextBlob."""
     polarity = TextBlob(text).sentiment.polarity
     label = 'Positive' if polarity > 0.1 else 'Negative' if polarity < -0.1 else 'Neutral'
     return label, polarity
