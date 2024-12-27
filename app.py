@@ -10,20 +10,11 @@ from nltk.stem import WordNetLemmatizer
 from textblob import TextBlob
 import matplotlib.pyplot as plt
 import nltk
-import os
 
-# Buat folder untuk menyimpan dataset NLTK di runtime
-nltk_data_path = os.path.join(os.path.dirname(__file__), "nltk_data")
-if not os.path.exists(nltk_data_path):
-    os.makedirs(nltk_data_path)
-
-# Tambahkan lokasi ke path NLTK
-nltk.data.path.append(nltk_data_path)
-
-# Unduh dataset yang diperlukan
-nltk.download('punkt', download_dir=nltk_data_path)
-nltk.download('stopwords', download_dir=nltk_data_path)
-nltk.download('wordnet', download_dir=nltk_data_path)
+# Unduh nltk
+nltk.download('punkt_tab')
+nltk.download('stopwords')
+nltk.download('wordnet')
 
 headers = {'User-Agent': 'Mozilla/5.0'}
 
