@@ -14,7 +14,7 @@ Interactive web application built with **Streamlit**, With just one URL input, t
 
 ---
 
-🗂️ Folder & File Overview
+🗂️ **Folder & File Overview**
 
 ```bash
 Sentiment_Analysis/
